@@ -2,87 +2,65 @@
 
 using namespace std;
 
-int occurrencesOfCharacter(string sample, char findIt)
-{
-  vector<int> characterLocations;
-  for (int i = 0; i < sample.size(); i++)
-    if (sample[i] == findIt)
-      characterLocations.push_back(sample[i]);
-
-  return characterLocations.size();
-}
-
 char cadeiaBemDefinida(string cadeia)
 {
   char definicao = 'S';
-
-  // a quantidade fechamentos de um caractere deve ser a mesma que a quantidade de abertura e vice versa
-  if (occurrencesOfCharacter(cadeia, '[') != occurrencesOfCharacter(cadeia, ']') | occurrencesOfCharacter(cadeia, '(') != occurrencesOfCharacter(cadeia, ')') | occurrencesOfCharacter(cadeia, '{') != occurrencesOfCharacter(cadeia, '}'))
-  {
-    definicao = 'N';
-  }
+  stack<char> cadeiaEmPilha;
 
   for (int i = 0; i < cadeia.size(); i++)
   {
-    if (definicao == 'N')
-    {
-      break;
-    }
-
     char caractere = cadeia.at(i);
-    // sempre que tenho uma abertura preciso achar um fechamento e vice versa
 
-    if (caractere == '{')
+    // sempre usar || em C++ para condições lógicas
+    if (caractere == '{' || caractere == '(' || caractere == '[')
     {
-      int fechamentoIndex = cadeia.find_last_of('}');
-      if (fechamentoIndex == string::npos | fechamentoIndex < i)
+      cadeiaEmPilha.push(caractere);
+    }
+
+    if ((caractere == '}' || caractere == ')' || caractere == ']') && cadeiaEmPilha.size() == 0)
+    {
+      definicao = 'N';
+    }
+
+    if (caractere == '}' && !cadeiaEmPilha.empty())
+    {
+      if (cadeiaEmPilha.top() == '{')
+      {
+        cadeiaEmPilha.pop();
+      }
+      else
       {
         definicao = 'N';
       }
     }
 
-    if (caractere == '}')
+    if (caractere == ']' && !cadeiaEmPilha.empty())
     {
-      int aberturaIndex = cadeia.find_first_of('{');
-      if (aberturaIndex == string::npos || aberturaIndex > i)
+      if (cadeiaEmPilha.top() == '[')
+      {
+        cadeiaEmPilha.pop();
+      }
+      else
       {
         definicao = 'N';
       }
     }
 
-    if (caractere == '(')
+    if (caractere == ')' && !cadeiaEmPilha.empty())
     {
-      int fechamentoIndex = cadeia.find_last_of(')');
-      if (fechamentoIndex == string::npos | fechamentoIndex < i)
+      if (cadeiaEmPilha.top() == '(')
+      {
+        cadeiaEmPilha.pop();
+      }
+      else
       {
         definicao = 'N';
       }
     }
 
-    if (caractere == ')')
+    if (i == cadeia.size() - 1 && cadeiaEmPilha.size() != 0)
     {
-      int aberturaIndex = cadeia.find_first_of('(');
-      if (aberturaIndex == string::npos || aberturaIndex > i)
-      {
-        definicao = 'N';
-      }
-    }
-    if (caractere == '[')
-    {
-      int fechamentoIndex = cadeia.find_last_of(']');
-      if (fechamentoIndex == string::npos | fechamentoIndex < i)
-      {
-        definicao = 'N';
-      }
-    }
-
-    if (caractere == ']')
-    {
-      int aberturaIndex = cadeia.find_first_of('[');
-      if (aberturaIndex == string::npos || aberturaIndex > i)
-      {
-        definicao = 'N';
-      }
+      definicao = 'N';
     }
   }
 
