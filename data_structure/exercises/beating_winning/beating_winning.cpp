@@ -2,87 +2,40 @@
 
 using namespace std;
 
-// pilha
-// fazer isso até que n_apresentador esteja vazio
-// percorrer o numero(string)
-// pegar o menor inteiro convertido e cortar ele
-// cortar quantas vezes a qtd diz para apagar
-// cada vez que fizer isso colocar o resultado na pilha maior premio
-// printar o maior premio
+int n, d;
+string numero_apresentador, maior_premio;
 
 int main()
 {
-  stack<string> qtd_digitos_qtd_apagar;
-  stack<string> n_apresentador;
-  stack<string> maior_premio;
-
-  bool keep = true;
-  while (keep)
+  while (cin >> n >> d) // Enquanto houver coisas pra ler
   {
-    string digito;
-    getline(cin, digito);
+    if (n == 0 && d == 0)
+      return 0;
 
-    if (digito == "0 0")
+    cin >> numero_apresentador;
+
+    int erased = 0;
+    for (char cur : numero_apresentador)
     {
-      keep = false;
-      break;
+      // algoritmo guloso
+      // O algoritmo guloso é apropriado quando uma solução ótima pode ser construída por meio de escolhas locais ótimas em cada etapa.
+      // O problema deve ter a propriedade de subestrutura ótima, o que significa que uma solução global ótima pode ser alcançada combinando soluções ótimas para subproblemas menores.
+      while (maior_premio.size() > 0 && cur > maior_premio.back() && erased < d)
+      {
+        maior_premio.pop_back();
+        erased++;
+      }
+
+      // n - d é o tamanho da resposta
+      if (maior_premio.size() < n - d)
+        maior_premio.push_back(cur); // append
     }
 
-    qtd_digitos_qtd_apagar.push(digito);
+    cout << maior_premio << "\n";
 
-    string n;
-    cin >> n;
-    n_apresentador.push(n);
-
-    cin.ignore();
+    numero_apresentador.clear();
+    maior_premio.clear();
   }
-
-  for (int i = 0; i < n_apresentador.size(); i++)
-  {
-    string numeroAtual = n_apresentador.top();
-    vector<int> algarismos = {};
-
-    for (int i = 0; i < numeroAtual.size(); i++)
-    {
-      char algarismo = numeroAtual.at(i);
-      int convertido = algarismo - '0';
-      algarismos.push_back(convertido);
-    }
-
-    vector<int> digitosParaApagar = {};
-    int qtd_para_apagar = qtd_digitos_qtd_apagar.top().at(2) - '0';
-    qtd_digitos_qtd_apagar.pop();
-
-    for (int i = 0; i < qtd_para_apagar; i++)
-    {
-      auto min = min_element(algarismos.begin(), algarismos.end());
-      digitosParaApagar.push_back(*min);
-      int indexOfMinElement = distance(begin(algarismos), min);
-      algarismos.erase(algarismos.begin() + indexOfMinElement);
-    }
-
-    for (int i = 0; i < digitosParaApagar.size(); i++)
-    {
-      int nApagarIndex = numeroAtual.find_first_of(numeroAtual.substr(digitosParaApagar.at(i)));
-      cout << nApagarIndex << endl;
-      numeroAtual.erase(nApagarIndex, 1);
-    }
-
-    cout << numeroAtual << endl;
-
-    n_apresentador.pop();
-  }
-
-  // while (!qtd_digitos_qtd_apagar.empty())
-  // {
-  //   cout << qtd_digitos_qtd_apagar.top() << endl;
-  //   qtd_digitos_qtd_apagar.pop();
-  // }
-  // while (!n_apresentador.empty())
-  // {
-  //   cout << n_apresentador.top() << endl;
-  //   n_apresentador.pop();
-  // }
 
   return 0;
 }
