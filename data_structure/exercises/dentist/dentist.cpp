@@ -2,10 +2,17 @@
 
 using namespace std;
 
+#define MAXN 10100
+
 struct Consulta
 {
   int inicio;
   int fim;
+};
+
+bool compara(Consulta a, Consulta b)
+{
+  return a.fim < b.fim;
 };
 
 int main()
@@ -14,28 +21,36 @@ int main()
   int n;
   cin >> n;
 
-  stack<Consulta> consultas_possiveis;
+  // = {}, pra por padrão setar tudo como 0
+  Consulta consultas[MAXN] = {};
 
-  for (int i = 0; i < n; i++)
+  // popula vetor
+  for (int i = 1; i <= n; i++)
   {
-    int inicio, fim;
-    cin >> inicio >> fim;
-    Consulta consulta = {inicio, fim};
+    cin >> consultas[i].inicio >> consultas[i].fim;
+  }
 
-    if (consultas_possiveis.size() > 0)
+  // ordeno as consultas pelo horário de fim
+  // pointer/iterator das posições inicio e fim (it sorts only between)
+  // consultas+1 é um pointer. Ex: 0x7fff4d569218, e consultas sozinho também é.
+  // Binary function that accepts two elements in the range as arguments
+  sort(consultas + 1, consultas + n + 1, compara);
+
+  int horario_livre = 0;
+  int qtd = 0;
+
+  // for each
+  for (Consulta consulta : consultas)
+  {
+    // != pra nao contar os vazios gerados pelo MAXN
+    if (consulta.inicio && consulta.fim != 0 && consulta.inicio >= horario_livre)
     {
-      if (consulta.inicio >= consultas_possiveis.top().fim)
-      {
-        consultas_possiveis.push(consulta);
-      }
-    }
-    else
-    {
-      consultas_possiveis.push(consulta);
+      qtd++;
+      horario_livre = consulta.fim;
     }
   }
 
-  cout << consultas_possiveis.size() << endl;
+  std::cout << qtd << std::endl;
 
   return 0;
 }
