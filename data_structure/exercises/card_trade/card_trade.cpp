@@ -2,90 +2,41 @@
 
 using namespace std;
 
-// set
-
-// unica troca
-
-// n_maximo trocas
-
 int main()
 {
   int n_cartas_A;
   int n_cartas_B;
+  int counter[100005][2] = {};
 
   cin >> n_cartas_A >> n_cartas_B;
 
-  set<int> cartasA;
-  set<int> cartasB;
-  map<int, int> trocasA;
-  map<int, int> trocasB;
-
   for (int i = 0; i < n_cartas_A; i++)
   {
-    int c;
-    cin >> c;
-    cartasA.insert(c);
+    int carta;
+    cin >> carta;
+    // marco que alice tem a carta
+    counter[carta][0] = 1;
   }
 
   for (int i = 0; i < n_cartas_B; i++)
   {
-    int c;
-    cin >> c;
-    cartasB.insert(c);
+    int carta;
+    cin >> carta;
+    // marco que beatriz tem a carta
+    counter[carta][1] = 1;
   }
 
-  int n_maximo_trocas = 0;
+  int counterAlice = 0, counterBeatriz = 0;
 
-  for (int i = 0; i < cartasA.size(); i++)
+  for (int i = 1; i <= 100000; i++)
   {
-    int a = 0;
-    auto cardA = cartasA.begin();
-    while (a != i)
-    {
-      cardA++;
-      a++;
-    }
-
-    if (cartasB.find(*cardA) == cartasB.end() && trocasA.find(*cardA) == trocasA.end())
-    {
-      for (int i = 0; i < n_cartas_B; i++)
-      {
-        int b = 0;
-        auto cardB = cartasB.begin();
-        while (b != i)
-        {
-          cardB++;
-          b++;
-        }
-
-        if (cartasA.find(*cardB) == cartasA.end())
-        {
-          trocasA.insert({*cardA, *cardB});
-          trocasB.insert({*cardB, *cardA});
-          n_maximo_trocas++;
-        }
-      }
-    }
+    if (counter[i][0] == 1 && !counter[i][1])
+      counterAlice++;
+    if (counter[i][1] == 1 && !counter[i][0])
+      counterBeatriz++;
   }
 
-  cout << min(trocasA.size(), trocasB.size()) << endl;
-
-  // auto pointer = cartasA.begin();
-  // for (int i = 0; i < n_cartas_A; i++)
-  // {
-  //   cout << *pointer << " ";
-  //   pointer++;
-  // }
-
-  // cout << endl;
-
-  // auto pointer2 = cartasB.begin();
-  // for (int i = 0; i < n_cartas_B; i++)
-  // {
-  //   cout << *pointer2 << " ";
-  //   pointer2++;
-  // }
-  // cout << endl;
+  cout << min(counterAlice, counterBeatriz) << endl;
 
   return 0;
 }
