@@ -1,64 +1,69 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <vector>
+#include <map>
 using namespace std;
-
-// pegar uma sequência contínua de pedaços, ou pegar pedaços das extremidades.
 
 int main()
 {
-  int n_pedacos;
-  int qtd_sanduiche;
+  int N, D;
+  cin >> N >> D;
 
-  cin >> n_pedacos >> qtd_sanduiche;
+  vector<int> A(N); // Vetor para armazenar os comprimentos dos pedaços do sanduíche
+  for (int i = 0; i < N; i++)
+    cin >> A[i]; // Leitura dos comprimentos dos pedaços do sanduíche
 
-  map<int, int> map_pedacos;
-  for (int i = 0; i < n_pedacos; i++)
+  int ans1 = 0;     // Variável para contar as sequências contíguas com soma igual a D
+  int l = 0, r = 0; // Ponteiros esquerdo (l) e direito (r) para delimitar as sequências contíguas
+  int soma = 0;     // Variável para armazenar a soma dos comprimentos dos pedaços
+
+  // Percorre o vetor A utilizando a técnica dos dois ponteiros
+  while (l < N)
   {
-    int j;
-    cin >> j;
-    map_pedacos.insert({i, j});
+    // Move o ponteiro direito (r) para a direita enquanto a soma for menor ou igual a D
+    while (r < N && soma + A[r] <= D)
+    {
+      soma += A[r];
+      r += 1;
+    }
+
+    // Se a soma dos comprimentos dos pedaços for igual a D, incrementa o contador
+    if (soma == D)
+      ans1++;
+
+    // Reduz a janela movendo o ponteiro esquerdo (l) para a direita
+    soma -= A[l];
+    l += 1;
   }
 
-  int ans = 0;
-  int counter = 0;
-  auto iterator = map_pedacos.begin();
-  while (counter != qtd_sanduiche)
+  vector<int> Pref(N), Suf(N); // Vetores para armazenar as somas de prefixo e sufixo
+
+  int acc = 0;
+  for (int i = 0; i < N; i++)
   {
-    if (counter > qtd_sanduiche)
-    {
-      break;
-    }
-
-    counter += iterator->second;
-    iterator++;
-
-    if (counter == qtd_sanduiche)
-    {
-      ans++;
-    }
+    acc += A[i];
+    Pref[i] = acc; // Calcula as somas de prefixo
   }
 
-  int counter2 = 0;
-  auto iterator2 = map_pedacos.end();
-  iterator--;
-
-  while (counter2 != qtd_sanduiche)
+  acc = 0;
+  for (int i = N - 1; i >= 0; i--)
   {
-    if (counter2 > qtd_sanduiche)
-    {
-      break;
-    }
-
-    counter2 += iterator2->second;
-    iterator2--;
-
-    if (counter2 == qtd_sanduiche)
-    {
-      ans++;
-    }
+    acc += A[i];
+    Suf[i] = acc; // Calcula as somas de sufixo
   }
 
-  cout << ans << endl;
+  map<int, int> SufCount; // Mapa para contar as ocorrências das somas de sufixo
+
+  int ans2 = 0; // Variável para contar as sequências contíguas com soma igual a D usando as extremidades
+  for (int i = N - 2; i >= 0; i--)
+  {
+    SufCount[Suf[i + 1]] += 1; // Incrementa o contador para a soma de sufixo atual
+    if (Pref[i] > D)
+      continue; // Se a soma de prefixo for maior que D, passa para a próxima iteração
+
+    ans2 += SufCount[D - Pref[i]]; // Incrementa o contador com o número de ocorrências das somas de sufixo correspondentes
+  }
+
+  cout << ans1 + ans2 << endl; // Imprime o resultado total
 
   return 0;
 }
