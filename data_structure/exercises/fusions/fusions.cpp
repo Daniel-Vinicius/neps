@@ -2,8 +2,49 @@
 
 using namespace std;
 
-const int MAXN = 100000;
-const int qtdMaximaFusoesBanco = 11;
+const int MAXN = 1000010;
+
+int parent[MAXN], _size[MAXN];
+
+int find(int value)
+{
+  // cout << "value: " << value << " parent[value]: " << parent[value] << endl;
+  if (parent[value] == value)
+  {
+    return value;
+  }
+  return parent[value] = find(parent[value]);
+}
+
+void merge(int i, int j)
+{
+  int parent_i = find(i);
+  int parent_j = find(j);
+
+  if (parent_i == parent_j)
+  {
+    return;
+  }
+  // cout << parent[parent_i] << " " << parent[parent_j] << endl;
+  // cout << parent_i << " " << parent_j << endl;
+
+  if (_size[parent_i] >= _size[parent_j])
+  {
+    // j se junta ao conjunto de i
+    parent[parent_j] = parent_i;
+    _size[parent_i] += _size[parent_j];
+  }
+
+  if (_size[parent_j] >= _size[parent_i])
+  {
+    // i se junta ao conjunto de j
+    parent[parent_i] = parent_j;
+    _size[parent_i] += _size[parent_j];
+  }
+
+  // cout << parent[parent_i] << " " << parent[parent_j] << endl;
+  // cout << parent_i << " " << parent_j << endl;
+}
 
 int main()
 {
@@ -12,9 +53,14 @@ int main()
   int n_operacoes;
 
   cin >> n_bancos >> n_operacoes;
-
-  int bancos[MAXN][qtdMaximaFusoesBanco] = {};
   // ans: se cada consulta se refere ao mesmo banco -> S ou N
+
+  for (int i = 0; i < n_bancos; i++)
+  {
+    // os bancos são o conjunto e inicialmente cada banco é seu próprio pai
+    _size[i] = 1;
+    parent[i] = i;
+  }
 
   for (int i = 0; i < n_operacoes; i++)
   {
@@ -25,39 +71,18 @@ int main()
 
     if (tipo == 'F')
     {
-      bancos[cod1][0] = 1;  // bancos[code][0] guarda se já foi fundido
-      bancos[cod1][1] += 1; // bancos[code][1] guarda quantas vezes já foi fundido
-      bancos[cod1][bancos[cod1][1] + 2] = cod2;
-
-      bancos[cod2][0] = 1;  // bancos[code][0] guarda se já foi fundido
-      bancos[cod2][1] += 1; // bancos[code][1] guarda quantas vezes já foi fundido
-      bancos[cod2][bancos[cod2][1] + 2] = cod1;
+      merge(cod1, cod2);
     }
 
     if (tipo == 'C')
     {
-      if (bancos[cod1][0] == 0)
+      if (find(cod1) == find(cod2))
+      {
+        cout << 'S' << endl;
+      }
+      else
       {
         cout << 'N' << endl;
-        continue;
-      }
-
-      if (bancos[cod1][0] == 1)
-      {
-        for (int j = 3; j < qtdMaximaFusoesBanco; j++)
-        {
-          if (bancos[cod1][j] == cod2)
-          {
-            cout << 'S' << endl;
-            break;
-          }
-
-          else if (j == (qtdMaximaFusoesBanco - 1) && bancos[cod1][j] != cod2)
-          {
-            cout << 'N' << endl;
-            break;
-          }
-        }
       }
     }
   }
