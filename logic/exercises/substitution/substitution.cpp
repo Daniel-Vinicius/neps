@@ -1,62 +1,37 @@
-#include <bits/stdc++.h>
+#include <iostream>
 
 using namespace std;
 
-// 27 min
-
 int main()
 {
-  vector<int> v;
+  int arr[10], mini = 99999;
 
-  int menor = 100000;
-  set<int> menorOcorrencias;
-  int mO[10][10] = {};
+  // Lendo os valores de entrada e guardando o menor valor
   for (int i = 0; i < 10; i++)
   {
-    int value;
-    cin >> value;
-    if (value < menor)
-    {
-      menor = value;
-      mO[menor][i] = 1;
-    }
-
-    if (value == menor)
-    {
-      mO[menor][i] = 1;
-    }
-
-    v.push_back(value);
+    cin >> arr[i];
+    mini = min(mini, arr[i]);
   }
 
-  cout << "Menor: " << menor << endl;
+  // Imprimindo o menor valor
+  cout << "Menor: " << mini << endl;
 
-  int n_ocorrencias = 0;
-
-  for (int i = 0; i < 10; i++)
-  {
-    if (mO[menor][i] == 1)
-    {
-      n_ocorrencias++;
-      menorOcorrencias.insert(i);
-    }
-  }
-
+  // Percorrendo todo o for, e imprimindo os índices os quais são igual ao menor valor lido
   cout << "Ocorrencias: ";
-  for (int i = 0; i < n_ocorrencias; i++)
-  {
-    auto ptr = menorOcorrencias.begin();
-    cout << *ptr << " ";
-    v[*ptr] = -1;
-    menorOcorrencias.erase(menorOcorrencias.begin());
-  }
+  for (int i = 0; i < 10; i++)
+    if (arr[i] == mini)
+      cout << i << ' ';
+
   cout << endl;
 
-  for (int i = 0; i < v.size(); i++)
-  {
-    cout << v[i] << " ";
-  }
-  cout << endl;
+  // Percorrendo novamente todo o array, mas desta vez vendo se o valor atual é igual ao menor valor para
+  // imprimir no lugar dele, -1
+  for (int i = 0; i < 10; i++)
+    if (arr[i] == mini)
+      cout << -1 << ' ';
+    else
+      cout << arr[i] << ' ';
 
+  cout << endl;
   return 0;
 }
