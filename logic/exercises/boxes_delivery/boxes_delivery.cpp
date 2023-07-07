@@ -1,30 +1,30 @@
-#include <bits/stdc++.h>
+#include <iostream>
 
 using namespace std;
+
+int vecCaixas[3];
+
+bool caixa1e2em3, caixa1em3, caixa2em3, caixa1em2;
 
 int main()
 {
 
-  int a, b, c;
-  cin >> a >> b >> c;
+  for (int i = 0; i < 3; i++)
+    cin >> vecCaixas[i];
 
-  if ((c > b && b > a) || c > (a + b))
-  {
-    cout << 1 << endl;
-    return 0;
-  }
+  caixa1e2em3 = (vecCaixas[0] + vecCaixas[1]) < vecCaixas[2];
+  caixa1em3 = vecCaixas[0] < vecCaixas[2];
+  caixa2em3 = vecCaixas[1] < vecCaixas[2];
+  caixa1em2 = vecCaixas[0] < vecCaixas[1];
 
-  if ((c > b && b <= a) || c == b && b > a)
-  {
-    cout << 2 << endl;
-    return 0;
-  }
+  if (caixa1e2em3 || (caixa1em2 && caixa2em3))
+    cout << 1 << '\n';
 
-  if (c == b && b == a)
-  {
-    cout << 3 << endl;
-    return 0;
-  }
+  else if ((caixa2em3 && !caixa1em2) || (!caixa2em3 && caixa1em2))
+    cout << 2 << '\n';
+
+  else
+    cout << 3 << '\n';
 
   return 0;
 }
