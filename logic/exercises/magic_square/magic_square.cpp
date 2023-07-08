@@ -2,51 +2,55 @@
 
 using namespace std;
 
+// soma do quadrado mágico ou -1 caso o quadrado não seja mágico.
+// as linhas, colunas e diagonais têm a mesma soma.
+
 int main()
 {
-  int N;
+  int dimensions = 0;
+  cin >> dimensions;
 
-  cin >> N;
+  int somaLinha[dimensions] = {};
+  int somaColuna[dimensions] = {};
+  int somaDiagonalPrincipal = 0;
+  int somaDiagonalSecundaria = 0;
 
-  int sum_l[N] = {};    // armazena a soma de cada linha
-  int sum_c[N] = {};    // armazena a soma de cada coluna
-  int d_principal = 0;  // armazena a soma da diagonal principal
-  int d_secundaria = 0; // armazena a soma da diagonal secundaria
-
-  for (int i = 0; i < N; i++)
+  for (int i = 0; i < dimensions; i++)
   {
-    for (int j = 0; j < N; j++)
+    for (int j = 0; j < dimensions; j++)
     {
-      int num;
+      int n = 0;
+      cin >> n;
 
-      cin >> num;
-
-      sum_l[i] += num;
-      sum_c[j] += num;
+      somaLinha[i] += n;
+      somaColuna[j] += n;
 
       if (i == j)
-        d_principal += num;
-
-      if (i + j == N - 1)
-        d_secundaria += num;
+        somaDiagonalPrincipal += n;
+      if (i + j == dimensions - 1)
+        somaDiagonalSecundaria += n;
     }
   }
 
   bool ok = true;
 
-  if (d_principal != d_secundaria)
+  if (somaDiagonalPrincipal != somaDiagonalSecundaria)
     ok = false;
 
-  for (int i = 0; i < N; i++)
+  for (int i = 0; i < dimensions; i++)
   {
-    if (d_principal != sum_l[i] or d_principal != sum_c[i])
+    if (somaDiagonalPrincipal != somaLinha[i] or somaDiagonalPrincipal != somaColuna[i])
       ok = false;
   }
 
   if (ok)
-    cout << d_principal << endl;
+  {
+    cout << somaDiagonalPrincipal << endl;
+  }
   else
+  {
     cout << -1 << endl;
+  }
 
   return 0;
 }
