@@ -2,9 +2,10 @@
 
 using namespace std;
 
+// 20 minutes
+
 int main()
 {
-
   int n_pessoas_fila;
   cin >> n_pessoas_fila;
 
