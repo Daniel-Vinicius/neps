@@ -1,28 +1,28 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <string>
+#include <vector>
 
 using namespace std;
 
-vector<int> counter;    // counter[c]: quantos números ja marcados na cartela c
-vector<int> vencedores; // cartelas vencedoras, em ordem
+vector<vector<int>> cartelas; // cartelas[n]: cartelas contendo numero n, em ordem
+vector<int> counter;          // counter[c]: quantos números ja marcados na cartela c
+vector<int> vencedores;       // cartelas vencedoras, em ordem
 
 int main()
 {
-  int n_cartelas;
-  int tamanho_cartela;
-  int U;
+  int n_cartelas, tamanho_cartela, U;
   cin >> n_cartelas >> tamanho_cartela >> U;
 
-  vector<vector<int>> cartelas;
-  cartelas = vector<vector<int>>(n_cartelas);
-  counter = vector<int>(n_cartelas, 0);
+  counter = vector<int>(n_cartelas + 1, 0);
+  cartelas = vector<vector<int>>(U + 1);
 
-  for (int i = 0; i < n_cartelas; i++)
+  for (int c = 1; c <= n_cartelas; c++)
   {
-    for (int j = 0; j < tamanho_cartela; j++)
+    for (int j = 1; j <= tamanho_cartela; j++)
     {
       int n;
       cin >> n;
-      cartelas[i].push_back(n);
+      cartelas[n].push_back(c);
     }
   }
 
@@ -30,25 +30,18 @@ int main()
   {
     int n;
     cin >> n;
-    for (int j = 0; j < n_cartelas; j++)
+    for (int cartela : cartelas[n])
     {
-      for (int k = 0; k < tamanho_cartela; k++)
+      if (++counter[cartela] == tamanho_cartela)
       {
-        if (cartelas[j][k] == n)
-        {
-          if (++counter[j] == tamanho_cartela)
-          {
-            vencedores.push_back(j);
-          }
-          break;
-        }
+        vencedores.push_back(cartela);
       }
     }
   }
 
   for (int c : vencedores)
   {
-    cout << c + 1 << " ";
+    cout << c << " ";
   }
   cout << endl;
 
