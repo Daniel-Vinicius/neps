@@ -2,20 +2,6 @@
 
 using namespace std;
 
-int includes(vector<int> array, int item)
-{
-  auto itemFound = std::find(std::begin(array), std::end(array), item);
-
-  if (itemFound != std::end(array))
-  {
-    return 1;
-  }
-  else
-  {
-    return 0;
-  }
-}
-
 int main()
 {
 
@@ -23,7 +9,7 @@ int main()
   cin >> n_pessoas_fila;
 
   vector<int> filaOriginal;
-  vector<int> pessoasSairam;
+  set<int> sairam;
   for (int i = 0; i < n_pessoas_fila; i++)
   {
     int n;
@@ -37,13 +23,13 @@ int main()
   {
     int n;
     cin >> n;
-    pessoasSairam.push_back(n);
+    sairam.insert(n);
   }
 
   for (int i = 0; i < n_pessoas_fila; i++)
   {
     int n = filaOriginal[i];
-    if (includes(pessoasSairam, n) == 0)
+    if (sairam.find(n) == sairam.end())
     {
       cout << n << " ";
     }
