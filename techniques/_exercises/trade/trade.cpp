@@ -1,37 +1,55 @@
-#include <bits/stdc++.h>
+#include <iostream>
 
 using namespace std;
 
+const int MAXN = 100005;
+
+// soma de prefixos
+
 int main()
 {
-  int qtdCartas, qtdTrocas;
-  cin >> qtdCartas >> qtdTrocas;
+  int n, t, cima[MAXN], baixo[MAXN], operacoes[MAXN], somaprefixos[MAXN];
 
-  int cartas[qtdCartas][2] = {};
-  pair<int, int> trocas[qtdTrocas] = {};
+  cin >> n >> t;
 
-  // cartas para cima
-  for (int i = 0; i < qtdCartas; i++)
-    cin >> cartas[i][1];
-
-  // cartas para baixo
-  for (int i = 0; i < qtdCartas; i++)
-    cin >> cartas[i][0];
-
-  for (int k = 0; k < qtdTrocas; k++)
+  for (int i = 1; i <= n; i++)
   {
-    int i, j;
-    cin >> i >> j;
-    trocas[k] = make_pair(i - 1, j - 1);
-
-    for (int m = trocas[k].first; m <= trocas[k].second; m++)
-      swap(cartas[m][1], cartas[m][0]);
+    cin >> cima[i];
   }
 
-  for (int i = 0; i < qtdCartas; i++)
+  for (int i = 1; i <= n; i++)
   {
-    cout << cartas[i][1] << " ";
+    cin >> baixo[i];
   }
+
+  for (int i = 0; i < t; i++)
+  {
+    int a, b;
+    cin >> a >> b;
+    operacoes[a]++;
+    operacoes[b + 1]--;
+  }
+
+  somaprefixos[0] = 0;
+  // usa as operações para calcular o soma prefixo e assim poder dizer quantas vezes cada carta foi virada.
+  for (int i = 1; i <= n; i++)
+  {
+    somaprefixos[i] = somaprefixos[i - 1] + operacoes[i];
+  }
+
+  // se foi virada n par de vezes, é o mesmo que não virar
+  for (int i = 1; i <= n; i++)
+  {
+    if (somaprefixos[i] % 2 == 0)
+    {
+      cout << cima[i] << " ";
+    }
+    else
+    {
+      cout << baixo[i] << " ";
+    }
+  }
+
   cout << endl;
 
   return 0;
