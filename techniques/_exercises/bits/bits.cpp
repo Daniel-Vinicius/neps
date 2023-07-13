@@ -9,6 +9,9 @@ ll dp[1010][1010];
 int n, k;
 
 // Bottom-up
+// Para resolver o exercício vamos utilizar um DP tal que,
+// dp[i][j] representa o número de sequência de tamanho i, que terminam com exatamente
+// j 1′ s consecutivos e satisfazem a restrição do problema(ou seja, j < K).
 
 int main()
 {
