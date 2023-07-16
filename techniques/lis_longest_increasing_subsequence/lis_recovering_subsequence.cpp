@@ -6,7 +6,7 @@ using namespace std;
 const int MAXN = 100010;
 const int INF = 1000000010;
 
-// O(n²)
+// O(n log n)
 int main()
 {
   int n;
