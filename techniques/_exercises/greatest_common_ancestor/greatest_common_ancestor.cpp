@@ -12,7 +12,6 @@ int s1[MAXN], s2[MAXN];
 
 int main()
 {
-
   int N, M;
   cin >> N >> M;
   for (int i = 0; i < N; i++)
