@@ -24,7 +24,7 @@ int main()
 
   for (int i = 0; i < n; i++)
   {
-    int p = lower_bound(dp, dp + n + 1, v[i]) - dp;
+    int p = lower_bound(dp, dp + n + 1, v[i]) - dp; // upper_bound se pode ter elementos iguais
 
     ind[p] = i;
     dp[p] = v[i];

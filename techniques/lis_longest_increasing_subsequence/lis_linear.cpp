@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 // O(n log n)
@@ -17,7 +18,7 @@ vector<int> lis(vector<int> &nums)
   for (int i = 0; i < n; i++)
   {
     int num = nums[i];
-    // A busca binária é usada para encontrar a posição correta onde o elemento atual deve ser inserido na subsequência. Isso é feito por meio da função lower_bound, que encontra o primeiro elemento maior ou igual ao elemento atual na subsequência.
+    // A busca binária é usada para encontrar a posição correta onde o elemento atual deve ser inserido na subsequência. Isso é feito por meio da função lower_bound, que encontra o primeiro elemento maior do que o elemento atual na subsequência.
     auto it = lower_bound(piles.begin(), piles.end(), num);
     int idx = it - piles.begin(); // idx é a posição em que o elemento atual deve ser inserido no vetor piles, caso não exista um elemento igual a ele.
     topIdxs[i] = idx;
@@ -43,7 +44,7 @@ vector<int> lis(vector<int> &nums)
 
 int main()
 {
-  vector<int> nums = {10, 22, 9, 33, 21, 50, 41, 60};
+  vector<int> nums = {10, 22, 22, 33, 21, 50, 41, 60};
   vector<int> lisResult = lis(nums);
 
   cout << "Longest Increasing Subsequence: ";
