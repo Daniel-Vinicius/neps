@@ -15,7 +15,7 @@ public:
   Graph(int n, bool is_undirected = true)
   {
     this->n = n;
-    this->adj = new vector<int>[n];
+    this->adj = new vector<int>[n + 10];
     this->is_undirected = is_undirected;
   }
 
@@ -31,7 +31,7 @@ public:
   int count_components()
   {
     delete this->visited; // Deleta o vetor anterior da memória. Isso é importante no caso que count_components é chamada múltiplas vezes
-    this->visited = new bool[this->n];
+    this->visited = new bool[this->n + 10];
 
     int qtd_components = 0; // Guarda a quantidade de componentes do nosso grafo
 
