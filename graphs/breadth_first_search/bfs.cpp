@@ -80,7 +80,7 @@ public:
       int current = q.front();
       q.pop();
 
-      for (int i = 0; i < this->adj[current].size(); i++)
+      for (int i = 0; i < this->adj[current].size(); i++) // Itera por todos os vizinhos do vértice atual
       {
         int neighbour = this->adj[current][i];
 
