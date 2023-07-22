@@ -1,87 +1,75 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <vector>
+#include <queue>
 using namespace std;
 
-const int INF = 1e9;
-const int MAXN = 10010;
+#define ll long long
+#define pb push_back
 
-class Graph
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+
+const int mxn = 1e3 + 5, inf = 1e7 + 100;
+
+int n, m, dist[mxn];
+vector<ii> graph[mxn];
+bool visited[mxn];
+
+void dijkstra()
 {
-public:
-  int n;
-  vector<pair<int, int>> *list;
-
-  Graph(int n)
+  for (int i = 0; i < n; i++)
   {
-    this->n = n;
-    this->list = new vector<pair<int, int>>[this->n];
-  };
-
-  void add_edge(int a, int b, int weight)
-  {
-    this->list[a].push_back({b, weight});
-    this->list[b].push_back({a, weight});
-  };
-
-  vector<int> dijsktra(int s)
-  {
-    vector<int> dist;
-    dist.resize(this->n);
-
-    bool mark[this->n];
-
-    for (int i = 0; i < this->n; i++)
-    {
-      dist[i] = INF;
-      mark[i] = false;
-    }
-
-    dist[s] = 0;
-
-    for (int k = 0; k < this->n; k++)
-    {
-      int cur = -1;
-      for (int i = 0; i < this->n; i++)
-      {
-        if (mark[i])
-          continue;
-
-        if (cur == -1 or dist[i] < dist[cur])
-          cur = i;
-      }
-
-      mark[cur] = true;
-
-      for (int i = 0; i < this->list[cur].size(); i++)
-      {
-        int neighbour = this->list[cur][i].first;
-        int weight = this->list[cur][i].second;
-
-        dist[neighbour] = min(dist[neighbour], dist[cur] + weight);
-      }
-    }
-
-    return dist;
-  };
-};
-
-int main()
-{
-  // n_pilares, n_pontes
-  int N, M;
-  cin >> N >> M;
-  N += 2;
-  Graph bridges = Graph(N);
-  for (int i = 0; i < M; i++)
-  {
-    int a, b, w = 0;
-    cin >> a >> b >> w;
-    bridges.add_edge(a, b, w);
+    dist[i] = inf;
+    visited[i] = 0;
   }
 
-  vector<int> dist = bridges.dijsktra(0);
+  dist[0] = 0;
 
-  cout << dist[N - 1] << endl;
+  priority_queue<ii, vector<ii>, greater<ii>> pq;
 
+  pq.push({0, 0});
+
+  while (!pq.empty())
+  {
+    int i = pq.top().second;
+    pq.pop();
+
+    if (visited[i])
+      continue;
+
+    visited[i] = true;
+
+    for (ii neighbour : graph[i])
+    {
+      int node = neighbour.second;
+      int weight = neighbour.first;
+
+      if (dist[node] > dist[i] + weight)
+      {
+        dist[node] = dist[i] + weight;
+        pq.push({dist[node], node});
+      }
+    }
+  }
+}
+
+int main(void)
+{
+  cin >> n >> m;
+  // adicionamos 2 para contar o pilar final e inicial
+  n += 2;
+
+  for (int i = 0; i < m; i++)
+  {
+    int x, y, weight;
+    cin >> x >> y >> weight;
+    graph[x].pb({weight, y});
+    graph[y].pb({weight, x});
+  }
+
+  dijkstra();
+
+  // retorno a menor distância da última ponte
+  cout << dist[n - 1] << endl;
   return 0;
 }
