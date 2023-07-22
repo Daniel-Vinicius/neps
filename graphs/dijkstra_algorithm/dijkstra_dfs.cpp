@@ -53,7 +53,6 @@ public:
         if (mark[i]) // Se o i-ésimo vértice estiver marcado, ele não pode ser o vértice desejado
           continue;
 
-        // Se nós ainda não tivermos achado nenhum vértice não marcado (cur == 1) ou se a distância é menor, atualizamos o vértice atual
         if (cur == -1 || dist[i] < dist[cur])
           cur = i;
       }
