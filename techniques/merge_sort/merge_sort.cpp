@@ -77,8 +77,8 @@ int main()
   }
   cout << endl;
 
-  // 0 = inicio do intervalo no meu vetor que quero ordernar
-  // N-1 = ultima posicao do intervalo que quero ordernar no vetor
+  // 0 = inicio do intervalo no meu vetor que quero ordenar
+  // N-1 = ultima posição do intervalo que quero ordenar no vetor
   mergeSort(0, N - 1, x);
 
   cout << "Sorted array" << endl;
