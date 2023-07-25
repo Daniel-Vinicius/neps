@@ -32,6 +32,7 @@ void merge(int i, int j)
   }
 }
 
+// Almost O(1) - DSU (Disjoint Set Union) ou Union Find
 int main()
 {
   int n, q;
@@ -49,13 +50,16 @@ int main()
     cin >> type >> a >> b;
 
     if (type == 1)
+    {
       merge(a, b);
+      cout << "Merge between: " << a << " and " << b << endl;
+    }
     else
     {
       if (find(a) == find(b))
-        cout << "Same set" << endl;
+        cout << a << " and " << b << " are in same sets" << endl;
       else
-        cout << "Different sets" << endl;
+        cout << a << " and " << b << " are in different sets" << endl;
     }
   }
 }
